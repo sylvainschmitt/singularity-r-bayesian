@@ -3,4 +3,5 @@
 .RData
 .Ruserdata
 template_*
-HOWTO.html
+*.html
+*.sif

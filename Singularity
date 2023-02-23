@@ -1,25 +1,28 @@
-Bootstrap: docker
-From :  continuumio/miniconda3
-IncludeCmd : yes
-
-%files
-environment.yml
-
-%post
-apt-get update && apt-get install -y procps && apt-get clean -y
-/opt/conda/bin/conda env create -n myEnv -f /environment.yml 
-/opt/conda/bin/conda clean -a
-
-%environment
-export PATH=/opt/conda/bin:$PATH
-. /opt/conda/etc/profile.d/conda.sh
-conda activate myEnv
-
-%runscript
-echo "hello this is a template build."
-
-%help
-Tools for Snakemake template
+BootStrap: shub
+From: tpall/singularity-r:4.0.3
 
 %labels
-Author Sylvain Schmitt
+  Author Sylvain Schmitt
+
+%help
+   R and bayesian packages Singularity container 
+
+%files
+  install.R /install.R
+
+%post
+  apt-get update -qq \
+    && apt-get install -y \
+    --no-install-recommends \
+    libudunits2-dev \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libgsl-dev \
+    libnode-dev \
+    libz-dev \
+    libxml2-dev \
+    libfontconfig1-dev \
+    && Rscript install.R \
+    && rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
+    && rm install.R
+    
